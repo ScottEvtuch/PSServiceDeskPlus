@@ -19,24 +19,18 @@ function Get-SDPRequest
         $RequestID
     )
 
-    Begin
-    {
-    }
     Process
     {
-        $Response = Invoke-SDPAPI -Method 'Post' -Module 'request' -ID $RequestID -Operation 'GET_REQUEST'
+        # Invoke the API
+        $Response = Invoke-SDPAPI -Module 'request' -ID $RequestID -Operation 'GET_REQUEST' -Method Post
 
+        # Collect the result
         $Result = $Response.operation.Details
 
-        Write-Verbose "Got $($Results.Count) results from the API"
+        # Convert to PowerShell object
+        $Ticket = $Result | ConvertFrom-SDPObject
 
-        $object = @{}
-        $Result.parameter | % {$object.Add($_.Name,$_.Value)}
-        $Ticket = New-Object -TypeName PSObject -Property $object
-
+        # Return the object
         return $Ticket
-    }
-    End
-    {
     }
 }

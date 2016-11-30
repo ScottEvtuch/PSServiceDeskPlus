@@ -19,29 +19,28 @@ function Get-SDPNotes
         $RequestID
     )
 
-    Begin
-    {
-    }
     Process
     {
-        $Response = Invoke-SDPAPI -Method "Post" -Module "request" -ID $RequestID -SubModule "notes" -Operation "GET_NOTES"
+        # Invoke the API
+        $Response = Invoke-SDPAPI -Module "request" -ID $RequestID -SubModule "notes" -Operation "GET_NOTES" -Method Post
 
+        # Collect the results
         $Results = $Response.operation.Details.notes.note
-
         Write-Verbose "Got $($Results.Count) results from the API"
 
-        $Notes = @()
-
-        foreach ($Result in $Results)
+        if ($Results.Count -gt 0)
         {
-            $object = @{}
-            $Result.parameter | % {$object.Add($_.Name,$_.Value)}
-            $Notes += New-Object -TypeName PSObject -Property $object
+            # Convert to PowerShell objects
+            $Notes = $Results | ConvertFrom-SDPObject
+        }
+        else
+        {
+            # We have no results from the API
+            Write-Warning "No notes were returned for WorkOrderID $RequestID"
+            $Notes = $null
         }
 
+        # Return the objects
         return $Notes
-    }
-    End
-    {
     }
 }
