@@ -12,69 +12,89 @@ function Invoke-SDPAPI
     [Alias()]
     Param
     (
-        # HTTP method
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true)]
-        $Method,
-
         # Module to use
         [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true)]
+                   ParameterSetName = 'Module')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'ID')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModule')]
+        [String]
         $Module,
 
         # ID for module
-        [Parameter(Mandatory=$false,
-                   ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'ID')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModule')]
+        [int]
         $ID,
 
         # Sub-Module to use
-        [Parameter(Mandatory=$false,
-                   ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModule')]
+        [String]
         $SubModule,
 
         # Operation to perform
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$true)]
+        [String]
         $Operation,
 
+        # HTTP method
+        [Parameter(Mandatory=$true)]
+        [Microsoft.PowerShell.Commands.WebRequestMethod]
+        $Method,
+        
         # Input data
-        [Parameter(Mandatory=$false,
-                   ValueFromPipelineByPropertyName=$true)]
+        [Parameter()]
+        [String]
         $InputData
     )
 
-    Begin
-    {
-    }
     Process
     {
-        $RequestBody = @{
+        $Body = @{
             'TECHNICIAN_KEY' = Get-SDPAPIKey;
             'OPERATION_NAME' = $Operation;
             'INPUT_DATA' = $InputData;
         }
 
-        if ($ID -eq $null)
+        # Build the URI
+        switch ($PSCmdlet.ParameterSetName)
         {
-            $Response = Invoke-RestMethod -Method $Method -Uri "$SDPURL/$Module/" -Body $RequestBody -ErrorAction Stop
+            'Module'
+            {
+                $Uri = "$SDPURL/$Module/"
+            }
+            'ID'
+            {
+                $Uri = "$SDPURL/$Module/$ID/"
+            }
+            'SubModule'
+            {
+                $Uri = "$SDPURL/$Module/$ID/$Submodule"
+            }
+            Default {throw "Bad ParameterSet"}
         }
-        elseif ($SubModule -eq $null)
+
+        # Invoke the API
+        try
         {
-            $Response = Invoke-RestMethod -Method $Method -Uri "$SDPURL/$Module/$ID/" -Body $RequestBody -ErrorAction Stop
-        } else
+            $Response = Invoke-RestMethod -Method $Method -Uri $Uri -Body $Body -ErrorAction Stop
+        }
+        catch
         {
-            $Response = Invoke-RestMethod -Method $Method -Uri "$SDPURL/$Module/$ID/$Submodule" -Body $RequestBody -ErrorAction Stop
+            throw "API Request failed: $_"
         }
         
-
+        # Throw an error if SDP sent us back a failed message
         if ($Response.operation.result.status -eq 'Failed')
         {
-            throw [Exception] "API Request failed: $($Response.operation.result.message)"
+            throw "API returned error: $($Response.operation.result.message)"
         }
 
+        # Return the response object
         return $Response.API.response
-    }
-    End
-    {
     }
 }
