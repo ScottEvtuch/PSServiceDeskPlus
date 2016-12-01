@@ -10,19 +10,17 @@ function Get-SDPAPIKey
 {
     Process
     {
-        if ($SDPAPIKey -ne $null)
-        {
-            # Return the API key
-            return $SDPAPIKey
-        }
-        else
+        Write-Verbose $SDPAPIKey.ToString()
+
+        if ($SDPAPIKey -eq '')
         {
             # Prompt the user for the API key
             $SDPAPIKey = Read-Host -Prompt "Please provide ServiceDeskPlus API key" -AsSecureString
-
-            # Return the API key
-            return $SDPAPIKey
         }
         
+        $SDPAPIKeyBSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SDPAPIKey)
+        $SDPAPIKeyString = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($SDPAPIKeyBSTR)
+
+        return $SDPAPIKeyString
     }
 }
