@@ -1,12 +1,33 @@
 # Setup variables
 
     $ExportParams = @{}
+    
+    # Establish the configuration directory
+    $ConfigRoot = "$env:APPDATA\PSModuleConfig"
 
     $SDPAPIKey = ''
 
     $SDPURL = ''
 
-    $ExportParams.Add("Variable",@("SDPAPIKey","SDPURL"))
+    $ExportParams.Add("Variable",@("SDPURL"))
+
+    try
+    {
+        $SDPAPIKey = Import-Clixml -Path "$ConfigRoot\PSServiceDeskPlus-SDPAPIKey.xml"
+    }
+    catch
+    {
+        throw $_ # Nothing to do here
+    }
+
+    try
+    {
+        $SDPURL = Import-Clixml -Path "$ConfigRoot\PSServiceDeskPlus-SDPURL.xml"
+    }
+    catch
+    {
+        throw $_ # Nothing to do here
+    }
 
 #region Public Functions
 
