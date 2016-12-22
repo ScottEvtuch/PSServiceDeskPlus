@@ -16,13 +16,13 @@ function Get-SDPRequest
         [Parameter(Mandatory=$true,
                    ValueFromPipelineByPropertyName=$true)]
         [int]
-        $RequestID
+        $WorkOrderID
     )
 
     Process
     {
         # Invoke the API
-        $Response = Invoke-SDPAPI -Module 'request' -ID $RequestID -Operation 'GET_REQUEST' -Method Post
+        $Response = Invoke-SDPAPI -Module 'request' -ID $WorkOrderID -Operation 'GET_REQUEST' -Method Post
 
         # Collect the result
         $Result = $Response.operation.Details
