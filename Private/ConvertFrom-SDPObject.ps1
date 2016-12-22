@@ -15,7 +15,12 @@ function ConvertFrom-SDPObject
         # View to pull tickets from
         [Parameter(Mandatory=$true,
                    ValueFromPipeline=$true)]
-        $InputObject
+        $InputObject,
+
+        # Additional properties
+        [Parameter(Mandatory=$false)]
+        [System.Collections.Hashtable]
+        $Properties = @{}
     )
 
     Process
@@ -24,7 +29,7 @@ function ConvertFrom-SDPObject
         $OutputObjects = @()
         foreach ($Object in $InputObject)
         {
-            $OutputObject = @{}
+            $OutputObject = $Properties.Clone()
             $InputObject.parameter | % {$OutputObject.Add($_.Name,$_.Value)}
             $OutputObjects += New-Object -TypeName PSObject -Property $OutputObject
         }
