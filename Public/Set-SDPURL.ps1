@@ -12,6 +12,11 @@ function Set-SDPURL
     [Alias()]
     Param
     (
+        # The URL for ServiceDeskPlus
+        [Parameter()]
+        [String]
+        $URL,
+
         # Whether or not to save the ServiceDeskPlus URL to the disk
         [Parameter()]
         [switch]
@@ -21,7 +26,7 @@ function Set-SDPURL
     Process
     {
         # Prompt the user for the ServiceDeskPlus URL
-        $script:SDPURL = Read-Host -Prompt "Please provide ServiceDeskPlus URL"
+        $script:SDPURL = $URL
 
         # Optionally save the ServiceDeskPlus URL to disk
         if ($save)
