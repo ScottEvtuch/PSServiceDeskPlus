@@ -4,7 +4,7 @@
 RootModule = 'PSServiceDeskPlus'
 
 # Version number of this module.
-ModuleVersion = '0.8'
+ModuleVersion = '0.8.1'
 
 # ID used to uniquely identify this module
 GUID = 'f89afdb7-34eb-45bf-9f70-540057c95456'
@@ -58,8 +58,8 @@ FormatsToProcess = @()
 # NestedModules = @()
 
 # Functions to export from this module
-FunctionsToExport = 'Get-SDPNotes', 'Get-SDPRequest', 'Get-SDPRequests', 'Set-SDPAPIKey', 
-               'Set-SDPURL'
+FunctionsToExport = 'Get-SDPNotes', 'Get-SDPRequest', 'Get-SDPRequests', 'New-SDPNote', 
+               'Set-SDPAPIKey', 'Set-SDPURL'
 
 # Cmdlets to export from this module
 CmdletsToExport = @()
