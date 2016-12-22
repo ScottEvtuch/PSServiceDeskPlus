@@ -33,6 +33,10 @@ function New-SDPNote
 
     Process
     {
+        # HTML Encode the text
+        Add-Type -AssemblyName System.Web
+        $Text = [System.Web.HttpUtility]::HtmlEncode($Text)
+
         # Create the input data
         $InputData = @"
             <Operation>
