@@ -17,7 +17,7 @@
     }
     catch
     {
-        throw $_ # Nothing to do here
+        # Nothing to do here
     }
 
     try
@@ -26,7 +26,7 @@
     }
     catch
     {
-        throw $_ # Nothing to do here
+        # Nothing to do here
     }
 
 #region Public Functions
