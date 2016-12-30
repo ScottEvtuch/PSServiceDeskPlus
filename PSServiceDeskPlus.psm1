@@ -3,7 +3,7 @@
     $ExportParams = @{}
     
     # Establish the configuration directory
-    $ConfigRoot = "$env:APPDATA\PSModuleConfig"
+    $ConfigRoot = "$env:LOCALAPPDATA\PSModuleConfig"
 
     $SDPAPIKey = ''
 
