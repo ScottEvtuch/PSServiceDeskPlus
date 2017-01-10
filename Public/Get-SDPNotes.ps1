@@ -28,9 +28,6 @@ function Get-SDPNotes
         {
             # We have no results from the API
             Write-Warning "No notes were returned for WorkOrderID $WorkOrderID"
-
-            # Return a null object
-            return $null
         }
         else
         {
