@@ -19,6 +19,8 @@ function Invoke-SDPAPI
                    ParameterSetName = 'ID')]
         [Parameter(Mandatory=$true,
                    ParameterSetName = 'SubModule')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModuleID')]
         [String]
         $Module,
 
@@ -27,14 +29,28 @@ function Invoke-SDPAPI
                    ParameterSetName = 'ID')]
         [Parameter(Mandatory=$true,
                    ParameterSetName = 'SubModule')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModuleID')]
         [int]
         $ID,
 
         # Sub-Module to use
         [Parameter(Mandatory=$true,
                    ParameterSetName = 'SubModule')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModuleID')]
         [String]
         $SubModule,
+
+        # ID for submodule
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'ID')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModule')]
+        [Parameter(Mandatory=$true,
+                   ParameterSetName = 'SubModuleID')]
+        [int]
+        $SubID,
 
         # Operation to perform
         [Parameter(Mandatory=$true)]
@@ -74,6 +90,10 @@ function Invoke-SDPAPI
             'SubModule'
             {
                 $Uri = "$SDPURL/$Module/$ID/$Submodule"
+            }
+            'SubModuleID'
+            {
+                $Uri = "$SDPURL/$Module/$ID/$Submodule/$SubID"
             }
             Default {throw "Bad ParameterSet"}
         }
