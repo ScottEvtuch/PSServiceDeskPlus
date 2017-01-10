@@ -30,6 +30,12 @@ function ConvertFrom-SDPObject
         foreach ($Object in $InputObject)
         {
             $OutputObject = $Properties.Clone()
+
+            if ($InputObject.URI -ne $null)
+            {
+                $Split = $InputObject.URI.Split('/')
+                $OutputObject.Add("$($Split[-3])id",$Split[-2])
+            }
             $InputObject.parameter | % {$OutputObject.Add($_.Name,$_.Value)}
             $OutputObjects += New-Object -TypeName PSObject -Property $OutputObject
         }
