@@ -44,10 +44,6 @@ function Invoke-SDPAPI
 
         # ID for submodule
         [Parameter(Mandatory=$true,
-                   ParameterSetName = 'ID')]
-        [Parameter(Mandatory=$true,
-                   ParameterSetName = 'SubModule')]
-        [Parameter(Mandatory=$true,
                    ParameterSetName = 'SubModuleID')]
         [int]
         $SubID,
