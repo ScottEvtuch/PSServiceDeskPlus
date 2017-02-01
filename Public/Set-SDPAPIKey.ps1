@@ -32,7 +32,7 @@ function Set-SDPAPIKey
         }
         else
         {
-            $script:SDPAPIKey = $Key
+            $script:SDPAPIKey = $Key | ConvertTo-SecureString -AsPlainText -Force
         }
 
         # Optionally save the API key to disk
