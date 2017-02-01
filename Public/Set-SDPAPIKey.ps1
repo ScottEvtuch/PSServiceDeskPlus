@@ -12,6 +12,11 @@ function Set-SDPAPIKey
     [Alias()]
     Param
     (
+        # The API key
+        [Parameter()]
+        [String]
+        $Key,
+
         # Whether or not to save the API key to the disk
         [Parameter()]
         [switch]
@@ -20,12 +25,15 @@ function Set-SDPAPIKey
 
     Process
     {
-        Write-Verbose "SDPAPIKey is $SDPAPIKey"
-
-        # Prompt the user for the API key
-        $script:SDPAPIKey = Read-Host -Prompt "Please provide ServiceDeskPlus API key" -AsSecureString
-
-        Write-Verbose "SDPAPIKey is $SDPAPIKey"
+        if ($Key -eq $null)
+        {
+            # Prompt the user for the API key
+            $script:SDPAPIKey = Read-Host -Prompt "Please provide ServiceDeskPlus API key" -AsSecureString
+        }
+        else
+        {
+            $script:SDPAPIKey = $Key
+        }
 
         # Optionally save the API key to disk
         if ($save)
