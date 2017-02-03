@@ -1,10 +1,14 @@
 ﻿<#
 .Synopsis
-   Short description
+   Converts API responses to usable PowerShell objects
 .DESCRIPTION
-   Long description
+   Takes the response from the SDP API and iterates through each object and its properties to
+   create a custom PowerShell object. If necessary, some properties are converted to make them more
+   useful in PowerShell. If a collection of properties is included in the parameters, they will be
+   added as properties to every object returned. This is useful for injecting the ID of the parent
+   object into child objects where the API does not provide that info.
 .EXAMPLE
-   Example of how to use this cmdlet
+   $Results | ConvertFrom-SDPObject -Properties @{"workorderID"=123456;}
 #>
 function ConvertFrom-SDPObject
 {
@@ -12,7 +16,7 @@ function ConvertFrom-SDPObject
     [Alias()]
     Param
     (
-        # View to pull tickets from
+        # Raw API response
         [Parameter(Mandatory=$true,
                    ValueFromPipeline=$true)]
         $InputObject,
@@ -25,27 +29,29 @@ function ConvertFrom-SDPObject
 
     Process
     {
-        # Set up variables
+        Write-Debug "Creating epoch DateTime object"
         $Epoch = New-Object DateTime 1970,1,1,0,0,0,([DateTimeKind]::Utc)
 
-        # Iterate through the results
+        Write-Verbose "Iterating through the results"
         $OutputObjects = @()
         foreach ($Object in $InputObject)
         {
+            Write-Debug "Creating a hashtable for the properties"
             $OutputObject = $Properties.Clone()
 
             # If a URI was passed to us, generate an ID property from it
             if ($InputObject.URI -ne $null)
             {
+                Write-Verbose "Generating ID property from URL"
                 $Split = $InputObject.URI.Split('/')
                 $OutputObject.Add("$($Split[-3])id",$Split[-2])
             }
 
-            # Add the parameters to the object properties
+            Write-Verbose "Iterating through the result parameters"
             $InputObject.parameter | % {
                 if ($_.Name -like "*time")
                 {
-                    # Convert the epoch integer to a datetime before adding
+                    Write-Verbose "Parsing datetime parameter"
                     if ($_.Value -eq -1)
                     {
                         $OutputObject.Add($_.Name,$null)
@@ -57,14 +63,14 @@ function ConvertFrom-SDPObject
                 }
                 else
                 {
-                    # Add normal properties
+                    Write-Debug "Adding $($_.Name) property"
                     $OutputObject.Add($_.Name,$_.Value)
                 }
             }
             $OutputObjects += New-Object -TypeName PSObject -Property $OutputObject
         }
 
-        # Return the objects
+        Write-Verbose "Return object from result"
         return $OutputObjects
     }
 }

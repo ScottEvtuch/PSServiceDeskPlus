@@ -1,10 +1,12 @@
 <#
 .Synopsis
-   Uses the REST API in SDP to submit or return information
+   Invokes the SDP REST API to submit or return information
 .DESCRIPTION
-   Calls "Invoke-RestMethod" to the SDP API URL given the specified parameters
+   Builds the URI and request body from parameters and the configured API key. Calls
+   "Invoke-RestMethod" to the SDP API URL from the module configuration. Returns the response
+   object or throws an exception if the API responds with an error.
 .EXAMPLE
-   Invoke-SDPAPI -Method Get -Module 'request' -Operation 'GET_REQUESTS' -InputData '<Details><parameter><name>filterby</name><value>All_Requests</value></parameter></Details>'
+   Invoke-SDPAPI -Method Get -Module 'request' -Operation 'GET_REQUESTS' -InputData $XmlString
 #>
 function Invoke-SDPAPI
 {
@@ -66,13 +68,14 @@ function Invoke-SDPAPI
 
     Process
     {
+        Write-Verbose "Building the request body"
         $Body = @{
             'TECHNICIAN_KEY' = Get-SDPAPIKey;
             'OPERATION_NAME' = $Operation;
             'INPUT_DATA' = $InputData;
         }
 
-        # Build the URI
+        Write-Verbose "Building the request URI"
         switch ($PSCmdlet.ParameterSetName)
         {
             'Module'
@@ -94,7 +97,7 @@ function Invoke-SDPAPI
             Default {throw "Bad ParameterSet"}
         }
 
-        # Invoke the API
+        Write-Verbose "Invoking the REST API"
         try
         {
             $Response = Invoke-RestMethod -Method $Method -Uri $Uri -Body $Body -ErrorAction Stop
@@ -110,7 +113,7 @@ function Invoke-SDPAPI
             throw "API returned error: $($Response.operation.result.message)"
         }
 
-        # Return the response object
+        Write-Verbose "Returning the response object"
         return $Response.API.response
     }
 }

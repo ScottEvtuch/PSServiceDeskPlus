@@ -1,8 +1,10 @@
 ﻿<#
 .Synopsis
-   Sets the API key
+   Sets the API key, and optionally saves it to the disk
 .DESCRIPTION
-   Sets the API key, and optionally saves it
+   If not supplied in the parameters, prompts the user for the API key. Converts plaintext string
+   to a SecureString and stores it in the module variable. If the Save switch is specified, check
+   for a configuration XML file and update/create it with the new key.
 .EXAMPLE
    Set-SDPAPIKey -Save
 #>
@@ -25,9 +27,9 @@ function Set-SDPAPIKey
 
     Process
     {
+        # Check if API key has been provided by parameter
         if ($Key -eq $null)
         {
-            # Prompt the user for the API key
             $script:SDPAPIKey = Read-Host -Prompt "Please provide ServiceDeskPlus API key" -AsSecureString
         }
         else
@@ -35,15 +37,16 @@ function Set-SDPAPIKey
             $script:SDPAPIKey = $Key | ConvertTo-SecureString -AsPlainText -Force
         }
 
-        # Optionally save the API key to disk
         if ($save)
         {
+            Write-Verbose "Saving the API key to disk"
+
             # Check for a configuration folder
             if (!(Test-Path -Path $ConfigRoot))
             {
-                # Configuration folder does not exist, try to create it
                 try
                 {
+                    Write-Debug "Creating the configuration folder"
                     New-Item -Path $ConfigRoot -ItemType Directory -ErrorAction Stop
                 }
                 catch
@@ -52,9 +55,9 @@ function Set-SDPAPIKey
                 }
             }
 
-            # Update the configuration file
             try
             {
+                Write-Debug "Updating the XML configuration file"
                 $SDPAPIKey | Export-Clixml -Path "$ConfigRoot\PSServiceDeskPlus-SDPAPIKey.xml" -Force -ErrorAction Stop
             }
             catch
