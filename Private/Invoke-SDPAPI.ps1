@@ -80,11 +80,11 @@ function Invoke-SDPAPI
         {
             'Module'
             {
-                $Uri = "$SDPURL/$Module/"
+                $Uri = "$SDPURL/$Module"
             }
             'ID'
             {
-                $Uri = "$SDPURL/$Module/$ID/"
+                $Uri = "$SDPURL/$Module/$ID"
             }
             'SubModule'
             {
@@ -108,9 +108,9 @@ function Invoke-SDPAPI
         }
         
         # Throw an error if SDP sent us back a failed message
-        if ($Response.operation.result.status -eq 'Failed')
+        if ($Response.API.response.operation.result.status -eq 'Failed')
         {
-            throw "API returned error: $($Response.operation.result.message)"
+            throw "API returned error: $($Response.API.response.operation.result.message)"
         }
 
         Write-Verbose "Returning the response object"
