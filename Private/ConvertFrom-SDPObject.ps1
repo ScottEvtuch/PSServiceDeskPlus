@@ -42,9 +42,17 @@ function ConvertFrom-SDPObject
             # If a URI was passed to us, generate an ID property from it
             if ($InputObject.URI -ne $null)
             {
-                Write-Verbose "Generating ID property from URL"
+                Write-Debug "Generating ID property from URL"
                 $Split = $InputObject.URI.Split('/')
-                $OutputObject.Add("$($Split[-3])id",$Split[-2])
+                $IDName = "$($Split[-3])ID"
+                $IDValue = $Split[-2]
+
+                # Check if the property already exists before adding it
+                if (!$InputObject.parameter.name.ToLower().Contains($IDName.ToLower()))
+                {
+                    Write-Verbose "Adding ID property from URL"
+                    $OutputObject.Add($IDName,$IDValue)
+                }
             }
 
             Write-Verbose "Iterating through the result parameters"
