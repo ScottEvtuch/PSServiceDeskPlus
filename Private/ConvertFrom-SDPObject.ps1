@@ -59,14 +59,35 @@ function ConvertFrom-SDPObject
             $InputObject.parameter | % {
                 if ($_.Name -like "*time")
                 {
-                    Write-Verbose "Parsing datetime parameter"
-                    if ($_.Value -eq -1)
+                    Write-Verbose "Parsing $($_.Name) datetime property"
+                    if ($_.Value -match '^[\d\.-]+$')
                     {
-                        $OutputObject.Add($_.Name,$null)
+                        Write-Debug "Time value is a number"
+                        if ([int64]$_.Value -lt 1)
+                        {
+                            Write-Debug "Time is null"
+                            $OutputObject.Add($_.Name,$null)
+                        }
+                        else
+                        {
+                            Write-Debug "Converting time from epoch"
+                            $OutputObject.Add($_.Name,$Epoch.AddMilliseconds($_.Value).ToLocalTime())
+                        }
                     }
                     else
                     {
-                        $OutputObject.Add($_.Name,$Epoch.AddMilliseconds($_.Value).ToLocalTime())
+                        Write-Debug "Time value is a string"
+                        $ThisValue = $_.Value
+                        try
+                        {
+                            Write-Debug "Converting time from string"
+                            $ThisValue = Get-Date $_.Value
+                        }
+                        catch
+                        {
+                            Write-Debug "Conversion failed, failback to string"
+                        }
+                        $OutputObject.Add($_.Name,$ThisValue)
                     }
                 }
                 else
