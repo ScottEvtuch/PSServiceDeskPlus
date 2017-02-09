@@ -1,10 +1,10 @@
-@{
+﻿@{
 
 # Script module or binary module file associated with this manifest.
 RootModule = 'PSServiceDeskPlus'
 
 # Version number of this module.
-ModuleVersion = '0.9'
+ModuleVersion = '0.9.1'
 
 # ID used to uniquely identify this module
 GUID = 'f89afdb7-34eb-45bf-9f70-540057c95456'
@@ -19,7 +19,7 @@ CompanyName = 'Scott Evtuch'
 Copyright = '(c) 2016 Scott Evtuch.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'A PowerShell module for invoking the ManageEngine ServiceDesk Plus API'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -88,7 +88,7 @@ PrivateData = @{
         # Tags = @()
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://raw.githubusercontent.com/ScottEvtuch/PSServiceDeskPlus/master/LICENSE'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/ScottEvtuch/PSServiceDeskPlus'
