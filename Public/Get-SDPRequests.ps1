@@ -50,10 +50,7 @@ function Get-SDPRequests
         $Results = $Response.operation.Details.record
         Write-Verbose "Got $($Results.Count) results from the API"
 
-        # Convert to PowerShell objects
-        $Tickets = $Results | ConvertFrom-SDPObject
-
-        # Return the objects
-        return $Tickets
+        # Convert to PowerShell objects and return results
+        $Results | ConvertFrom-SDPObject
     }
 }

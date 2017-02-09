@@ -75,10 +75,8 @@ function ConvertFrom-SDPObject
                     $OutputObject.Add($_.Name,$_.Value)
                 }
             }
-            $OutputObjects += New-Object -TypeName PSObject -Property $OutputObject
+            Write-Debug "Return object from result"
+            New-Object -TypeName PSObject -Property $OutputObject
         }
-
-        Write-Verbose "Return object from result"
-        return $OutputObjects
     }
 }

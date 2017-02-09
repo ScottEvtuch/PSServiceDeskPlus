@@ -27,10 +27,7 @@ function Get-SDPRequest
         # Collect the result
         $Result = $Response.operation.Details
 
-        # Convert to PowerShell object
-        $Ticket = $Result | ConvertFrom-SDPObject
-
-        # Return the object
-        return $Ticket
+        # Convert to PowerShell object and return result
+        $Result | ConvertFrom-SDPObject
     }
 }

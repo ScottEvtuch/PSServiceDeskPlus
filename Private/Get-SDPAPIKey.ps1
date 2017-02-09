@@ -19,8 +19,6 @@ function Get-SDPAPIKey
         
         Write-Verbose "Decrypting API key"
         $SDPAPIKeyBSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SDPAPIKey)
-        $SDPAPIKeyString = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($SDPAPIKeyBSTR)
-
-        return $SDPAPIKeyString
+        [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($SDPAPIKeyBSTR)
     }
 }

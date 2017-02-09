@@ -35,11 +35,8 @@ function Get-SDPNotes
             $Results = $Response.operation.Details.notes.note
             Write-Verbose "Got $(@($Results).Count) notes for WorkOrderID $WorkOrderID"
 
-            # Convert to PowerShell objects
-            $Notes = $Results | ConvertFrom-SDPObject -Properties @{"workOrderID"=$WorkOrderID}
-
-            # Return the objects
-            return $Notes
+            # Convert to PowerShell objects and return results
+            $Results | ConvertFrom-SDPObject -Properties @{"workOrderID"=$WorkOrderID}
         }
 
     }

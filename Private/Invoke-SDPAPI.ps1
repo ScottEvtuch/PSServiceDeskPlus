@@ -114,6 +114,6 @@ function Invoke-SDPAPI
         }
 
         Write-Verbose "Returning the response object"
-        return $Response.API.response
+        $Response.API.response
     }
 }
