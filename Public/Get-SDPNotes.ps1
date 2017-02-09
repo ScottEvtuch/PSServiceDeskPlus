@@ -24,12 +24,8 @@ function Get-SDPNotes
         # Invoke the API
         $Response = Invoke-SDPAPI -Module "request" -ID $WorkOrderID -SubModule "notes" -Operation "GET_NOTES" -Method Post
         
-        if ($Response.operation.Details -eq $null)
-        {
-            # We have no results from the API
-            Write-Warning "No notes were returned for WorkOrderID $WorkOrderID"
-        }
-        else
+        # Check for results
+        if ($Response.operation.Details -ne $null)
         {
             # Collect the results
             $Results = $Response.operation.Details.notes.note
