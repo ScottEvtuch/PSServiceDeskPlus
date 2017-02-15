@@ -113,6 +113,12 @@ function Invoke-SDPAPI
             throw "API returned error: $($Response.API.response.operation.result.message)"
         }
 
+        # Throw an error if we get a bogus response from the API
+        if ($Response -eq "[#document: null]")
+        {
+            throw "API returned a null response"
+        }
+
         Write-Verbose "Returning the response object"
         $Response.API.response
     }
