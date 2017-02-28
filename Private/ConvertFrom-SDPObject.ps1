@@ -17,7 +17,7 @@ function ConvertFrom-SDPObject
     Param
     (
         # Raw API response
-        [Parameter(Mandatory=$true,
+        [Parameter(Mandatory=$false,
                    ValueFromPipeline=$true)]
         $InputObject,
 
@@ -33,7 +33,6 @@ function ConvertFrom-SDPObject
         $Epoch = New-Object DateTime 1970,1,1,0,0,0,([DateTimeKind]::Utc)
 
         Write-Verbose "Iterating through the results"
-        $OutputObjects = @()
         foreach ($Object in $InputObject)
         {
             Write-Debug "Creating a hashtable for the properties"
