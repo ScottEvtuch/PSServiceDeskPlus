@@ -2,6 +2,8 @@
 
 A PowerShell module for invoking the ManageEngine ServiceDesk Plus API
 
+As of 2017-03-21 **I am no longer actively developing this module**. No new features or updates are planned.
+
 ## Supported Operations
 
 ### Requests

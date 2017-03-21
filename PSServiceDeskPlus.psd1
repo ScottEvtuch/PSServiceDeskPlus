@@ -4,7 +4,7 @@
 RootModule = 'PSServiceDeskPlus'
 
 # Version number of this module.
-ModuleVersion = '0.9.1'
+ModuleVersion = '0.9.2'
 
 # ID used to uniquely identify this module
 GUID = 'f89afdb7-34eb-45bf-9f70-540057c95456'
